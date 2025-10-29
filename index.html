@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Calculator — Find Your Most Productive Hours</title>
+  <meta name="description" content="Enter your sleep, wake time and caffeine details to discover your peak focus windows. Quick, science-inspired Focus Calculator for better productivity." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+  <style>
+    :root{
+      --bg:#f6fbff;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#4f46e5;
+      --accent-2:#06b6d4;
+      --glass: rgba(255,255,255,0.7);
+      --radius:14px;
+      --maxw:900px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,var(--bg),#eef8ff);display:flex;align-items:center;justify-content:center;padding:28px;color:#0f172a}
+    .wrap{width:100%;max-width:var(--maxw);}
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:14px}
+
+    .card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 6px 24px rgba(15,23,42,0.06);}
+    .grid{display:grid;grid-template-columns:1fr 380px;gap:18px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr}}
+
+    .form-row{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    label{font-size:13px;color:var(--muted);min-width:110px}
+    .input,select,input[type=time],input[type=number]{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #e6edf6;background:transparent}
+    input[type=range]{width:100%}
+
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;padding:12px 16px;border-radius:12px;border:0;cursor:pointer;font-weight:600}
+    .btn.secondary{background:transparent;border:1px solid #e6edf6;color:var(--accent);}
+
+    .results{margin-top:14px;padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(79,70,229,0.06),rgba(6,182,212,0.03));border:1px solid rgba(79,70,229,0.06)}
+    .time-block{font-weight:700;font-size:18px}
+    .muted{color:var(--muted);font-size:14px}
+
+    .blog-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .blog-item{padding:10px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #f1f6fb}
+    .blog-item h4{margin:0 0 6px 0;font-size:15px}
+    .blog-item p{margin:0;color:var(--muted);font-size:13px}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    .ads-placeholder{height:90px;border-radius:8px;background:linear-gradient(90deg,#fff,#f8fbff);display:flex;align-items:center;justify-content:center;border:1px dashed #e6edf6;color:var(--muted);}
+
+    .share{display:flex;gap:8px;margin-top:10px}
+    .share button{padding:8px 10px;border-radius:9px;border:0;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,0.04);cursor:pointer}
+
+    .meta{font-size:12px;color:var(--muted)}
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Focus Calculator",
+    "url": "https://focuscalculator.example/",
+    "description": "A quick Focus Calculator that estimates your peak focus windows based on your sleep, wake time and caffeine intake.",
+    "mainEntity": {
+      "@type": "SoftwareApplication",
+      "name": "Focus Calculator",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web",
+      "url": "https://focuscalculator.example/"
+    }
+  }
+  </script>
+
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">FC</div>
+        <div>
+          <h1>Focus Calculator</h1>
+          <p class="lead">Discover your most productive hours — science-inspired & instant.</p>
+        </div>
+      </div>
+      <div class="meta">No login • Private • Free</div>
+    </header>
+
+    <main class="card">
+      <div class="grid">
+        <!-- left column: form + results -->
+        <section>
+          <h3 style="margin-top:0">Tell us a few things</h3>
+          <div style="margin-top:8px">
+            <div class="form-row">
+              <label for="age">Age</label>
+              <input id="age" class="input" type="number" min="12" max="120" value="28" />
+            </div>
+
+            <div class="form-row">
+              <label for="sleep">Hours of sleep</label>
+              <input id="sleep" class="input" type="number" min="0" max="24" step="0.1" value="7.5" />
+            </div>
+
+            <div class="form-row">
+              <label for="caffeine">Caffeine (mg/day)</label>
+              <input id="caffeine" class="input" type="number" min="0" max="2000" step="10" value="100" />
+            </div>
+
+            <div class="form-row">
+              <label for="wake">Wake-up time</label>
+              <input id="wake" type="time" value="07:00" />
+            </div>
+
+            <div class="form-row">
+              <label for="bed">Bedtime</label>
+              <input id="bed" type="time" value="23:30" />
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:12px">
+              <button id="calc" class="btn">Calculate Focus Hours</button>
+              <button id="reset" class="btn secondary">Reset</button>
+            </div>
+
+            <div id="results" class="results" style="display:none">
+              <div class="muted">Primary focus window</div>
+              <div id="primary" class="time-block">—</div>
+              <div class="muted" style="margin-top:8px">Secondary focus window</div>
+              <div id="secondary" class="time-block">—</div>
+              <div style="margin-top:8px" id="tip" class="muted">—</div>
+
+              <div class="share">
+                <button id="shareBtn">Share result</button>
+                <button id="copyBtn">Copy summary</button>
+              </div>
+
+            </div>
+
+            <div style="margin-top:12px" class="ads-placeholder">Ad placeholder (top)</div>
+
+            <div style="margin-top:18px">
+              <h4 style="margin:0 0 8px 0">Quick tips</h4>
+              <ul style="margin:0 0 12px 18px;color:var(--muted)">
+                <li>Try to align demanding tasks with your primary window.</li>
+                <li>Short breaks every 50–90 minutes improve sustained focus.</li>
+                <li>Limit caffeine after mid-afternoon if you want evening focus.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:8px">
+              <h4 style="margin:0 0 8px 0">Newsletter</h4>
+              <div style="display:flex;gap:8px">
+                <input placeholder="Your email" class="input" id="email" />
+                <button class="btn secondary" id="subscribe">Subscribe</button>
+              </div>
+              <div style="margin-top:8px;color:var(--muted);font-size:13px">Get daily focus tips — free. We respect your privacy.</div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- right column: blog previews + ad -->
+        <aside>
+          <div style="position:sticky;top:20px">
+            <div class="card" style="padding:14px;margin-bottom:12px">
+              <h4 style="margin:0 0 8px 0">Why this works</h4>
+              <p class="muted" style="margin:0">This calculator uses simple circadian principles (sleep/wake timing) and a caffeine effect estimate to suggest your best windows for deep work. It's educational — not medical advice.</p>
+            </div>
+
+            <div class="ads-placeholder">Ad placeholder (side)</div>
+
+            <div style="margin-top:12px" class="card">
+              <h4 style="margin-top:0">From the blog</h4>
+              <div class="blog-list">
+                <div class="blog-item">
+                  <h4>How to improve focus in 4 steps</h4>
+                  <p>Simple actionable steps backed by research to help you focus more reliably.</p>
+                </div>
+                <div class="blog-item">
+                  <h4>Best time to drink coffee</h4>
+                  <p>When caffeine helps your focus — and when it hurts your sleep.</p>
+                </div>
+                <div class="blog-item">
+                  <h4>Pomodoro vs Deep Work</h4>
+                  <p>Which method aligns with your natural productivity rhythm?</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+
+      <footer>
+        <div style="margin-top:14px">© 2025 FocusCalculator.com | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></div>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Utility: parse HH:MM into minutes since midnight
+    function timeToMinutes(t){
+      if(!t) return 0;
+      const [hh,mm]=t.split(':').map(Number);
+      return hh*60+mm;
+    }
+    function minutesToTime(min){
+      min = ((min%1440)+1440)%1440; // wrap
+      const hh = Math.floor(min/60);
+      const mm = Math.round(min%60);
+      return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+    }
+    function minutesToPretty(min){
+      min = ((min%1440)+1440)%1440;
+      const h = Math.floor(min/60);
+      const m = Math.round(min%60);
+      const ampm = h>=12? 'PM':'AM';
+      const hh = ((h+11)%12)+1;
+      return `${hh}:${String(m).padStart(2,'0')} ${ampm}`;
+    }
+
+    // Main algorithm (simple, explainable, not medical advice)
+    function calcFocus({age, sleepHours, caffeineMg, wakeMin, bedMin}){
+      // Baseline assumptions:
+      // - Primary focus generally starts 60-120 minutes after waking
+      // - Better sleep length expands the first window
+      // - Younger people might have slightly later peaks
+      // - Caffeine can boost early-day alertness and push later-window performance depending on amount
+
+      const baselineStart = wakeMin + 90; // 1.5 hours after wake
+
+      // Sleep adjustment: if you slept more than 8, you get a slightly earlier and longer window
+      const sleepAdj = (sleepHours - 7.5); // negative if underslept
+      const startAdj = -Math.max(-30, Math.min(30, sleepAdj*12)); // minutes
+      const lengthBase = 120 + Math.max(-30, Math.min(90, (sleepHours-7.5)*20)); // minutes for primary window
+
+      // Age adjustment: older adults may prefer earlier windows (small effect)
+      const ageAdj = (age>=40) ? -10 : (age<25 ? 8 : 0);
+
+      // Caffeine effect (very rough): small caffeine gives morning boost (start earlier, longer), heavy caffeine can hurt evening window
+      const caffeineFactor = Math.max(0, Math.min(1.5, caffeineMg/250)); // 0..1.5
+      const caffeineStartAdj = -Math.min(25, caffeineFactor*20); // up to -30 min earlier
+      const caffeineLengthAdj = Math.min(40, caffeineFactor*30);
+
+      const primaryStart = Math.round(baselineStart + startAdj + ageAdj + caffeineStartAdj);
+      const primaryLength = Math.round(lengthBase + caffeineLengthAdj);
+      const primaryEnd = primaryStart + primaryLength;
+
+      // Secondary window: commonly a shorter post-lunch/late-afternoon window
+      const secondaryStart = Math.round(primaryEnd + 180 - Math.max(-30,Math.min(60,sleepAdj*10))); // ~3 hours after primary end
+      const secondaryLength = Math.round(60 + Math.max(0, Math.min(60, caffeineFactor*20)));
+      const secondaryEnd = secondaryStart + secondaryLength;
+
+      // Tip generation
+      let tip = '';
+      if(caffeineMg>300) tip = 'High caffeine intake may disrupt sleep — try reducing after mid-afternoon.';
+      else if(sleepHours < 6) tip = 'You may be sleep-deprived — aim for 7–9 hours for sustained focus.';
+      else tip = 'Good job — align deep work with your primary window for best results.';
+
+      return {
+        primaryStart, primaryEnd, secondaryStart, secondaryEnd, tip
+      };
+    }
+
+    // UI wiring
+    const calcBtn = document.getElementById('calc');
+    const resetBtn = document.getElementById('reset');
+    const results = document.getElementById('results');
+    const primaryEl = document.getElementById('primary');
+    const secondaryEl = document.getElementById('secondary');
+    const tipEl = document.getElementById('tip');
+    const shareBtn = document.getElementById('shareBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    calcBtn.addEventListener('click', ()=>{
+      const age = Number(document.getElementById('age').value)||28;
+      const sleepHours = Number(document.getElementById('sleep').value)||7.5;
+      const caffeineMg = Number(document.getElementById('caffeine').value)||0;
+      const wakeMin = timeToMinutes(document.getElementById('wake').value || '07:00');
+      const bedMin = timeToMinutes(document.getElementById('bed').value || '23:30');
+
+      const r = calcFocus({age,sleepHours,caffeineMg,wakeMin,bedMin});
+
+      primaryEl.textContent = `${minutesToPretty(r.primaryStart)} — ${minutesToPretty(r.primaryEnd)}`;
+      secondaryEl.textContent = `${minutesToPretty(r.secondaryStart)} — ${minutesToPretty(r.secondaryEnd)}`;
+      tipEl.textContent = r.tip;
+      results.style.display = 'block';
+
+      // Save a tiny share message
+      results.dataset.share = `My primary focus window is ${minutesToPretty(r.primaryStart)}–${minutesToPretty(r.primaryEnd)}. Try the Focus Calculator!`;
+
+      // Scroll into view on mobile
+      results.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+
+    resetBtn.addEventListener('click', ()=>{
+      document.getElementById('age').value = 28;
+      document.getElementById('sleep').value = 7.5;
+      document.getElementById('caffeine').value = 100;
+      document.getElementById('wake').value = '07:00';
+      document.getElementById('bed').value = '23:30';
+      results.style.display = 'none';
+    });
+
+    shareBtn.addEventListener('click', async ()=>{
+      const text = results.dataset.share || 'Try the Focus Calculator — find your peak focus hours!';
+      if(navigator.share){
+        try{ await navigator.share({title:'My Focus Hours',text, url:location.href}); }catch(e){/* ignore */}
+      } else {
+        alert('Copy this to share:\n\n'+text);
+      }
+    });
+
+    copyBtn.addEventListener('click', ()=>{
+      const text = results.dataset.share || '';
+      navigator.clipboard?.writeText(text).then(()=>{
+        copyBtn.textContent = 'Copied!';
+        setTimeout(()=>copyBtn.textContent='Copy summary',1400);
+      });
+    });
+
+    // Subscribe placeholder
+    document.getElementById('subscribe').addEventListener('click', ()=>{
+      const email = document.getElementById('email').value;
+      if(!email || !email.includes('@')){ alert('Please enter a valid email.'); return; }
+      alert('Thanks! We saved your email (demo).');
+      document.getElementById('email').value='';
+    });
+
+  </script>
+</body>
+</html>
